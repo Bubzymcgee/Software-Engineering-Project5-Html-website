@@ -8,6 +8,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        h1 {
+            margin: 30px 0 20px 0;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #1a3a52;
+            color: #0d2438;
+        }
+
         .header {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: rgb(2, 154, 255);
@@ -21,23 +34,102 @@
             box-sizing: border-box;
         }
 
+        table {
+            table-layout: fixed;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e8e8e8;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #1a3a52 0%, #2c5282 100%);
+            font-weight: 600;
+            color: white;
+        }
+
+        th {
+            padding: 14px;
+            border-bottom: 2px solid #0d2438;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+            color: #555;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f8fc;
+            border-left: 4px solid #1a3a52;
+        }
+
         .img-zoom-container {
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .img-zoom-lens {
             position: absolute;
-            border: 1px solid #d4d4d4;
+            border: 2px solid #1a3a52;
+            background: rgba(26, 58, 82, 0.15);
             /*set the size of the lens:*/
             width: 40px;
             height: 40px;
+            border-radius: 4px;
+            cursor: crosshair;
         }
 
         .img-zoom-result {
-            border: 1px solid #d4d4d4;
+            border: 2px solid #1a3a52;
+            border-radius: 6px;
             /*set the size of the result div:*/
-            width: 400px;
-            height: 400px;
+            width: 300px;
+            height: 300px;
+            background-color: #f8f9fa;
+        }
+
+        .btn-outline-primary {
+            transition: all 0.2s ease;
+            border-color: #1a3a52 !important;
+            color: #1a3a52 !important;
+            font-weight: 600;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #1a3a52 !important;
+            border-color: #1a3a52 !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 58, 82, 0.3);
+        }
+
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #d4d4d4;
+        }
+
+        .form-control:focus {
+            border-color: #1a3a52;
+            box-shadow: 0 0 0 0.2rem rgba(26, 58, 82, 0.15);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #1a3a52;
+            font-size: 0.9rem;
         }
     </style>
     <script>
@@ -125,10 +217,11 @@
             <tr>
                 <td>Tricycle</td>
                 <td class="img-zoom-container">
-                    <img id="myimage" style="display: block; width: 40%; margin: 0 auto;" src="./tricycle-unsplash.jpg"
-                        alt="Image of a children's red tricycle">
+                    <img id="myimage"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./tricycle-unsplash.jpg" alt="Image of a children's red tricycle">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult" class="img-zoom-result"></div>
                 </td>
                 <td>$ 200</td>
@@ -150,10 +243,11 @@
             <tr>
                 <td>BMX Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-one" style="display: block; width: 40%; margin: 0 auto;" src="./bmx.jpg"
-                        alt="Image of a BMX Bike">
+                    <img id="myimage-one"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./bmx.jpg" alt="Image of a BMX Bike">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-one" class="img-zoom-result"></div>
                 </td>
                 <td>$ 1500</td>
@@ -169,21 +263,22 @@
                         <button type="submit" class="btn btn-outline-primary">
                             Add to Cart
                         </button>
-                    </form>                    
+                    </form>
                 </td>
             </tr>
             <tr>
                 <td>Motorcycle</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-two" style="display: block; width: 40%; margin: 0 auto;" src="./motorcycle.jpg"
-                        alt="Image of a Motorcycle">
+                    <img id="myimage-two"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./motorcycle.jpg" alt="Image of a Motorcycle">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-two" class="img-zoom-result"></div>
                 </td>
                 <td>$ 8000</td>
                 <td>
-                     <form action="https://www.aitsafe.com/cf/add.cfm">
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
                         <input type="hidden" name="userid" value="15112713">
                         <input type="hidden" name="product" value="Motorcycle">
                         <input type="hidden" name="price" value="8000">
@@ -194,21 +289,22 @@
                         <button type="submit" class="btn btn-outline-primary">
                             Add to Cart
                         </button>
-                    </form> 
+                    </form>
                 </td>
             </tr>
             <tr>
                 <td>Unicycle</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-three" style="display: block; width: 40%; margin: 0 auto;" src="./unicycle.jpg"
-                        alt="Image of a unicycle">
+                    <img id="myimage-three"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./unicycle.jpg" alt="Image of a unicycle">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-three" class="img-zoom-result"></div>
                 </td>
                 <td>$ 800</td>
                 <td>
-                      <form action="https://www.aitsafe.com/cf/add.cfm">
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
                         <input type="hidden" name="userid" value="15112713">
                         <input type="hidden" name="product" value="Unicycle">
                         <input type="hidden" name="price" value="800">
@@ -225,10 +321,11 @@
             <tr>
                 <td>Tandem Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-four" style="display: block; width: 40%; margin: 0 auto;" src="./tandem bike.jpg"
-                        alt="Image of a tandem bike">
+                    <img id="myimage-four"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./tandem bike.jpg" alt="Image of a tandem bike">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-four" class="img-zoom-result"></div>
                 </td>
                 <td>$ 2000</td>
@@ -250,10 +347,11 @@
             <tr>
                 <td>E-Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-five" style="display: block; width: 40%; margin: 0 auto;" src="./ebike.jpg"
-                        alt="Image of a E-Bike">
+                    <img id="myimage-five"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./ebike.jpg" alt="Image of a E-Bike">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-five" class="img-zoom-result"></div>
                 </td>
                 <td>$ 3500</td>
@@ -275,10 +373,11 @@
             <tr>
                 <td>Mountain Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-six" style="display: block; width: 40%; margin: 0 auto;" src="./mountain bike.jpg"
-                        alt="Image of a mountain bike">
+                    <img id="myimage-six"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./mountain bike.jpg" alt="Image of a mountain bike">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-six" class="img-zoom-result"></div>
                 </td>
                 <td>$ 2300</td>
@@ -300,10 +399,11 @@
             <tr>
                 <td>Training Wheels</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-seven" style="display: block; width: 40%; margin: 0 auto;"
+                    <img id="myimage-seven"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
                         src="./training wheels.jpg" alt="Image of a children's bike with training wheels">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-seven" class="img-zoom-result"></div>
                 </td>
                 <td>$ 300</td>
@@ -326,10 +426,11 @@
             <tr>
                 <td>Dirt Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-eight" style="display: block; width: 40%; margin: 0 auto;" src="./dirtbike.jpg"
-                        alt="Image of a Dirt Bike">
+                    <img id="myimage-eight"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./dirtbike.jpg" alt="Image of a Dirt Bike">
                 </td>
-                <td class="text-start">
+                <td class="text-center">
                     <div id="myresult-eight" class="img-zoom-result"></div>
                 </td>
                 <td>$ 5000</td>
@@ -351,8 +452,9 @@
             <tr>
                 <td>Kids Bike</td>
                 <td class="img-zoom-container">
-                    <img id="myimage-nine" style="display: block; width: 40%; margin: 0 auto;" src="./kids bike.jpg"
-                        alt="Image of a children's bike">
+                    <img id="myimage-nine"
+                        style="display: block; width: 280px; height: 280px; object-fit: cover; margin: 0 auto;"
+                        src="./kids bike.jpg" alt="Image of a children's bike">
                 </td>
                 <td>
                     <div id="myresult-nine" class="img-zoom-result"></div>
