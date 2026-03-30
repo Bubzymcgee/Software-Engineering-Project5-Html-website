@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolling Thunder Bike Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        .header {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: rgb(2, 154, 255);
+        }
+
+        .full-width {
+            width: 100dvw;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .img-zoom-container {
+            position: relative;
+        }
+
+        .img-zoom-lens {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            /*set the size of the lens:*/
+            width: 40px;
+            height: 40px;
+        }
+
+        .img-zoom-result {
+            border: 1px solid #d4d4d4;
+            /*set the size of the result div:*/
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+    <script>
+        function handlepurchase(name, ammount) {
+            alert(`You have added ${name} ($${ammount}) to cart!`);
+        }
+
+        function imageZoom(imgID, resultID) {
+            var img, lens, result, cx, cy;
+            img = document.getElementById(imgID);
+            result = document.getElementById(resultID);
+            /* Create lens: */
+            lens = document.createElement("DIV");
+            lens.setAttribute("class", "img-zoom-lens");
+            /* Insert lens: */
+            img.parentElement.insertBefore(lens, img);
+            /* Set up zoom when image loads */
+            function setupZoom() {
+                /* Calculate the ratio between result DIV and lens: */
+                cx = result.offsetWidth / lens.offsetWidth;
+                cy = result.offsetHeight / lens.offsetHeight;
+                /* Set background properties for the result DIV */
+                result.style.backgroundImage = "url('" + img.src + "')";
+                result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+            }
+            if (img.complete) {
+                setupZoom();
+            } else {
+                img.onload = setupZoom;
+            }
+            /* Execute a function when someone moves the cursor over the image, or the lens: */
+            lens.addEventListener("mousemove", moveLens);
+            img.addEventListener("mousemove", moveLens);
+            /* And also for touch screens: */
+            lens.addEventListener("touchmove", moveLens);
+            img.addEventListener("touchmove", moveLens);
+            function moveLens(e) {
+                var pos, x, y;
+                /* Prevent any other actions that may occur when moving over the image */
+                e.preventDefault();
+                /* Get the cursor's x and y positions: */
+                pos = getCursorPos(e);
+                /* Calculate the position of the lens: */
+                x = pos.x - (lens.offsetWidth / 2);
+                y = pos.y - (lens.offsetHeight / 2);
+                /* Prevent the lens from being positioned outside the image: */
+                if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+                if (x < 0) { x = 0; }
+                if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+                if (y < 0) { y = 0; }
+                /* Set the position of the lens: */
+                lens.style.left = (img.offsetLeft + x) + "px";
+                lens.style.top = (img.offsetTop + y) + "px";
+                /* Display what the lens "sees": */
+                result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+            }
+            function getCursorPos(e) {
+                var a, x = 0, y = 0;
+                e = e || window.event;
+                /* Get the x and y positions of the image: */
+                a = img.getBoundingClientRect();
+                /* Calculate the cursor's x and y coordinates, relative to the image: */
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+                /* Consider any page scrolling: */
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return { x: x, y: y };
+            }
+        } 
+    </script>
+</head>
+
+<body>
+    <h1 class="display-1 text-center fw-bold" style="color: rgb(2, 154, 255)">Rolling Thunder Bike Store</h1>
+    <table class="text-center full-width">
+        <thead>
+            <th>Product Name</th>
+            <th>Image</th>
+            <th>Zoom Image</th>
+            <th>Cost ($)</th>
+            <th>Add to Cart</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tricycle</td>
+                <td class="img-zoom-container">
+                    <img id="myimage" style="display: block; width: 40%; margin: 0 auto;" src="./tricycle-unsplash.jpg"
+                        alt="Image of a children's red tricycle">
+                </td>
+                <td class="text-start">
+                    <div id="myresult" class="img-zoom-result"></div>
+                </td>
+                <td>$ 200</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Tricycle">
+                        <input type="hidden" name="price" value="200">
+                        <div class="mb-3">
+                            <label class="form-label" for="tricycle-qty"># of Tricycles</label>
+                            <input type="number" name="qty" id="tricycle-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>BMX Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-one" style="display: block; width: 40%; margin: 0 auto;" src="./bmx.jpg"
+                        alt="Image of a BMX Bike">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-one" class="img-zoom-result"></div>
+                </td>
+                <td>$ 1500</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="BMX Bike">
+                        <input type="hidden" name="price" value="1500">
+                        <div class="mb-3">
+                            <label class="form-label" for="bmx-qty"># of BMX Bikes</label>
+                            <input type="number" name="qty" id="bmx-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>                    
+                </td>
+            </tr>
+            <tr>
+                <td>Motorcycle</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-two" style="display: block; width: 40%; margin: 0 auto;" src="./motorcycle.jpg"
+                        alt="Image of a Motorcycle">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-two" class="img-zoom-result"></div>
+                </td>
+                <td>$ 8000</td>
+                <td>
+                     <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Motorcycle">
+                        <input type="hidden" name="price" value="8000">
+                        <div class="mb-3">
+                            <label class="form-label" for="motorcycle-qty"># of Motorcycles</label>
+                            <input type="number" name="qty" id="motorcycle-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form> 
+                </td>
+            </tr>
+            <tr>
+                <td>Unicycle</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-three" style="display: block; width: 40%; margin: 0 auto;" src="./unicycle.jpg"
+                        alt="Image of a unicycle">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-three" class="img-zoom-result"></div>
+                </td>
+                <td>$ 800</td>
+                <td>
+                      <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Unicycle">
+                        <input type="hidden" name="price" value="800">
+                        <div class="mb-3">
+                            <label class="form-label" for="unicycle-qty"># of Unicycles</label>
+                            <input type="number" name="qty" id="unicycle-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Tandem Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-four" style="display: block; width: 40%; margin: 0 auto;" src="./tandem bike.jpg"
+                        alt="Image of a tandem bike">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-four" class="img-zoom-result"></div>
+                </td>
+                <td>$ 2000</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Tandem Bike">
+                        <input type="hidden" name="price" value="2000">
+                        <div class="mb-3">
+                            <label class="form-label" for="tandem-qty"># of Tandem Bikes</label>
+                            <input type="number" name="qty" id="tandem-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>E-Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-five" style="display: block; width: 40%; margin: 0 auto;" src="./ebike.jpg"
+                        alt="Image of a E-Bike">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-five" class="img-zoom-result"></div>
+                </td>
+                <td>$ 3500</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="E-Bike">
+                        <input type="hidden" name="price" value="3500">
+                        <div class="mb-3">
+                            <label class="form-label" for="ebike-qty"># of E-Bikes</label>
+                            <input type="number" name="qty" id="ebike-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Mountain Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-six" style="display: block; width: 40%; margin: 0 auto;" src="./mountain bike.jpg"
+                        alt="Image of a mountain bike">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-six" class="img-zoom-result"></div>
+                </td>
+                <td>$ 2300</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Mountain Bike">
+                        <input type="hidden" name="price" value="2300">
+                        <div class="mb-3">
+                            <label class="form-label" for="mountain-qty"># of Mountain Bikes</label>
+                            <input type="number" name="qty" id="mountain-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Training Wheels</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-seven" style="display: block; width: 40%; margin: 0 auto;"
+                        src="./training wheels.jpg" alt="Image of a children's bike with training wheels">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-seven" class="img-zoom-result"></div>
+                </td>
+                <td>$ 300</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Training Wheels">
+                        <input type="hidden" name="price" value="300">
+                        <div class="mb-3">
+                            <label class="form-label" for="wheels-qty"># of Training Wheels</label>
+                            <input type="number" name="qty" id="wheels-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>Dirt Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-eight" style="display: block; width: 40%; margin: 0 auto;" src="./dirtbike.jpg"
+                        alt="Image of a Dirt Bike">
+                </td>
+                <td class="text-start">
+                    <div id="myresult-eight" class="img-zoom-result"></div>
+                </td>
+                <td>$ 5000</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Dirt Bike">
+                        <input type="hidden" name="price" value="5000">
+                        <div class="mb-3">
+                            <label class="form-label" for="dirtbike-qty"># of Dirt Bikes</label>
+                            <input type="number" name="qty" id="dirtbike-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Kids Bike</td>
+                <td class="img-zoom-container">
+                    <img id="myimage-nine" style="display: block; width: 40%; margin: 0 auto;" src="./kids bike.jpg"
+                        alt="Image of a children's bike">
+                </td>
+                <td>
+                    <div id="myresult-nine" class="img-zoom-result"></div>
+                </td>
+                <td>$ 50</td>
+                <td>
+                    <form action="https://www.aitsafe.com/cf/add.cfm">
+                        <input type="hidden" name="userid" value="15112713">
+                        <input type="hidden" name="product" value="Kids Bike">
+                        <input type="hidden" name="price" value="50">
+                        <div class="mb-3">
+                            <label class="form-label" for="kidsbike-qty"># of Kids Bikes</label>
+                            <input type="number" name="qty" id="kidsbike-qty" class="form-control" min="1">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            Add to Cart
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        imageZoom('myimage', 'myresult');
+        imageZoom('myimage-one', 'myresult-one');
+        imageZoom('myimage-two', 'myresult-two');
+        imageZoom('myimage-three', 'myresult-three');
+        imageZoom('myimage-four', 'myresult-four');
+        imageZoom('myimage-five', 'myresult-five');
+        imageZoom('myimage-six', 'myresult-six');
+        imageZoom('myimage-seven', 'myresult-seven');
+        imageZoom('myimage-eight', 'myresult-eight');
+        imageZoom('myimage-nine', 'myresult-nine');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
